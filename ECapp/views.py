@@ -7,9 +7,12 @@ from ECapp.forms import RegisterUserForm, LoginForm
 class login(View):
 
     def get(self, request):
+        if request.session.get('is_login',None):
+            return redirect(reverse("ECapp:main"))
+            
         form = LoginForm(request.GET)
         context = {
-            "form":form
+            "form":form,
         }
         return render(request, "login.html", context)
     
@@ -26,9 +29,12 @@ class login(View):
             'password':request.POST["password"],
         }
         if AccountUser.objects.filter(**user_check):
+            print(request.POST["user_id"])
+            request.session['is_login'] = True
+            queryset = AccountUser.objects.get(user_id=request.POST["user_id"])
             context = {
-                "form" : form,
-                "flag" : True
+                "flag" : True,
+                "name" : queryset.name
             }
             return render(request, "main.html", context)
         else:
@@ -113,3 +119,55 @@ class register_user_commit(View):
         }
 
         return render(request, "registerUserCommit.html", context) 
+    
+
+class main(View):
+
+    def get(self, request):
+        context = {
+            "is_login" : request.session.get('is_login'),
+        }
+        return render(request, "main.html",context)
+       
+
+    def post(self, request):
+        return render(request, "main.html")
+    
+class logout(View):
+
+    def get(self, request):
+        request.session.flush()
+        return redirect(reverse("ECapp:login"))
+       
+
+    def post(self, request):
+        pass
+
+
+#ここから下を頑張る
+class cart(View):
+
+    def get(self, request):
+        return render(request, "cart.html")
+       
+
+    def post(self, request):
+        pass
+
+class user_info(View):
+
+    def get(self, request):
+        return render(request, "userInfo.html")
+       
+
+    def post(self, request):
+        pass
+
+class update_user_confirm(View):
+    def get(self, request):
+
+        return render(request, "updateUserConfirm.html")
+       
+
+    def post(self, request):
+        pass
