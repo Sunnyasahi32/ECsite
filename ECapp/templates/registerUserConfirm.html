@@ -7,6 +7,17 @@
 <body>
 
     <h1>以下の情報で登録しますか？</h1>
+    <div class="form">
+        <form action= "{% url 'ECapp:register_user_commit' %} " method='POST'>
+            {% csrf_token %}
+            
+            <table>
+                {{form.as_table}}
+            </table>
+
+            <input type="submit" value="登録" />
+        </form>
+        </div>
 
 </body>
 

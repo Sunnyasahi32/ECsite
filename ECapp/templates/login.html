@@ -1,15 +1,25 @@
 <html>
-    
-<head>
-    <title>会員ログイン</title>
-</head>
+	<head>
+		<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+		<title>会員ログイン</title>
+	</head>
 
-<body>
+    <body>
+        <h1>ログインしてください。</h1>
+		{% if flag == False %}
+		<p>メールアドレスまたはパスワードが間違えています。もう一度入力してください。</p>
+		{% endif %}
+			<div class="form">
+            <form action= "{% url 'ECapp:login' %} " method='POST'>
+                {% csrf_token %}
+                
+				<table>
+                    {{form.as_table}}
+                </table>
 
-    <h1>ログインしてください。</h1>
+                <input type="submit" value="ログイン" />
+			</form>
+			</div>
 
-</body>
-
-
-
+	</body>
 </html>
