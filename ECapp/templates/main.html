@@ -6,7 +6,29 @@
 
 <body>
     <h1>商品の検索を行います。</h1>
+    カテゴリ：<select name ="btype">
+    <option value = "none">すべて</option>
+    <option value = "kutu">靴</option>
+    <option value = "bousi">帽子</option>
+    </select>
+    キーワード：<input type="text" name="keyword">
+    <input type="submit" value="検索"><br><br>
 
+
+    <a href ="{% url 'ECapp:cart' %}">ショッピングカートを見る</a><br><br>
+
+    {% if request.session.is_login%}
+    ようこそ{{name}}さん<br><br>
+
+    <a href ="{% url 'ECapp:user_info' %}">会員情報の確認</a><br><br>
+    <a href ="{% url 'ECapp:update_user_confirm' %}">会員情報の変更</a><br><br>
+    <a href ="{% url 'ECapp:logout' %}">ログアウト</a>
+    
+
+    {% else %}
+    <a href ="{% url 'ECapp:login' %}">ログイン</a>
+    
+    {% endif %}
 </body>
 
 
