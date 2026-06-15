@@ -5,9 +5,13 @@
 </head>
 
 <body>
+    <form action ="{% url 'ECapp:with_draw_confirm' %}" method="POST">
+        {% csrf_token %}
+        <h1>{{name}}さん、本当に退会しますか？</h1>
+        <input type="submit" value="退会" />
+    </form>
 
-    <h1>""さん、本当に退会しますか？</h1>
-
+    
 </body>
 
 

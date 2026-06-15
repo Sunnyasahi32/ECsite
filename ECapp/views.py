@@ -261,12 +261,29 @@ class update_user_commit(View):
 class with_draw_confirm(View):
 
     def get(self, request):
-        return render(request, "withdrawConfirm.html")
+        queryset = AccountUser.objects.get(user_id = request.session.get("user_id"))
+        context = {
+            "name":queryset.name,
+        }
+        return render(request, "withdrawConfirm.html",context)
 
     def post(self, request):
-        form = RegisterUserForm(request.POST)
-        if not form.is_valid():
-            context = {
-                "form" : form,
-            }
-            return render(request, "withdrawCommit.html", context)
+        queryset = AccountUser.objects.get(user_id = request.session.get("user_id"))
+        context = {
+            "name":queryset.name
+        }
+        request.session.flush()
+        queryset.delete()
+
+        return render(request, "withdrawCommit.html", context)
+    
+
+
+class with_draw_commit(View):
+
+    def get(self, request):
+        
+        return render(request, "withdrawCommit.html")
+
+    def post(self, request):
+        pass
