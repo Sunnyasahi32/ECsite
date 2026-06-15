@@ -7,7 +7,17 @@
 <body>
 
     <h1>以下の会員情報で更新しました。</h1>
+    <div class="form">
+        <form action= "{% url 'ECapp:update_user_commit' %} " method='POST'>
+            {% csrf_token %}
+            
+            <table>
+                {{form.as_table}}
+            </table>
 
+        </form>
+    </div>
+        <a href ="{% url 'ECapp:main' %}">商品検索</a>へ
 </body>
 
 

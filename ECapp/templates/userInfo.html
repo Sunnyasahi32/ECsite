@@ -5,9 +5,32 @@
 </head>
 
 <body>
-
     <h1>会員情報</h1>
 
+    <div class="table">
+    <table border="1">
+        <tr>
+            <th>会員ID</th>
+            <th>{{user_id}}</th>
+        </tr>
+        <tr>
+            <th>パスワード</th>
+            <th>{{password}}</th>
+        </tr>
+        <tr>
+            <th>お名前</th>
+            <th>{{name}}</th>
+        </tr>
+        <tr>
+            <th>お住所</th>
+            <th>{{address}}</th>
+        </tr>
+    </table>
+    </div>
+        <br>
+
+    <a href ="{% url 'ECapp:update_user' %}">会員情報の変更</a><br>
+    <a href ="{% url 'ECapp:main' %}">商品検索</a>へ
 </body>
 
 

@@ -7,7 +7,38 @@
 <body>
 
     <h1>会員情報</h1>
+        <form action= "{% url 'ECapp:update_user' %} " method='POST'>
+            {% csrf_token %}
+            {% if flag == False %}
+            パスワードが確認用パスワードと一致していません。
+            {% endif %}    
+            <table border="1">
+                <tr>
+                    <th>会員ID</th>
+                    <th><input type="text" name="user_id" value={{user_id}} required></th>
+                </tr>
+                <tr>
+                    <th>パスワード</th>
+                    <th><input type="text" name="password"  required></th>
+                </tr>
+                <tr>
+                    <th>確認用パスワード</th>
+                    <th><input type="text" name="password2" required></th>
+                </tr>
+                <tr>
+                    <th>お名前</th>
+                    <th><input type="text" name="name" value={{name}} required></th>
+                </tr>
+                <tr>
+                    <th>お住所</th>
+                    <th><input type="text" name="address" value={{address}} required></th>
+                </tr>
+            </table>
+                <input type="submit" value="変更" />
+		</form>
 
+        <br>
+        <a href ="{% url 'ECapp:main' %}">商品検索</a>へ
 </body>
 
 
