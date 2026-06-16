@@ -15,6 +15,8 @@ urlpatterns = [
     path("updateUserConfirm/", views.update_user_confirm.as_view(), name = 'update_user_confirm'),
     path("updateUserCmmit/", views.update_user_commit.as_view(), name = 'update_user_commit'),
     path("withDrawConfirm/", views.with_draw_confirm.as_view(), name = 'with_draw_confirm'),
+    path("searchResult/", views.search_result.as_view(), name = 'search_result'),
+    path("itemDetail/<int:item_id>/", views.item_detail.as_view(), name = 'item_detail'),
 
     
     path("", views.main.as_view(), name = 'main'),

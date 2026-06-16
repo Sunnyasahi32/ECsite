@@ -18,7 +18,7 @@ class AccountUser(models.Model):
 class ShoppingCategory(models.Model):
 
     class Meta:
-        db_table = "Shopping_category"
+        db_table = "shopping_category"
 
     category_id = models.IntegerField(verbose_name="カテゴリID", primary_key=True)
     name = models.CharField(verbose_name="名前", max_length=256)
@@ -31,7 +31,7 @@ class ShoppingCategory(models.Model):
 class ShoppingItem(models.Model):
 
     class Meta:
-        db_table = "Shopping_item"
+        db_table = "shopping_item"
 
     item_id = models.IntegerField(verbose_name="商品ID", primary_key=True)
     name = models.CharField(verbose_name="商品名", max_length=128)
@@ -49,7 +49,7 @@ class ShoppingItem(models.Model):
 class ShoppingItemsincart(models.Model):
 
     class Meta:
-        db_table = "Shopping_itemsincart"
+        db_table = "shopping_itemsincart"
 
     amount = models.IntegerField(verbose_name="数量")
     booked_date = models.DateTimeField(verbose_name="登録日", auto_now_add=True)
@@ -65,7 +65,7 @@ class ShoppingItemsincart(models.Model):
 class ShoppingPurchase(models.Model):
 
     class Meta:
-        db_table = "Shopping_purchase"
+        db_table = "shopping_purchase"
 
     purchase_id = models.IntegerField(verbose_name="注文ID", primary_key=True)
     destination = models.CharField(verbose_name="配送先", max_length=256)
@@ -82,7 +82,7 @@ class ShoppingPurchase(models.Model):
 class ShoppingPurchaseDetail(models.Model):
 
     class Meta:
-        db_table = "Shopping_purchasedetail"
+        db_table = "shopping_purchasedetail"
 
     purchase_detail_id = models.IntegerField(verbose_name="注文詳細ID", primary_key=True)
     amount = models.IntegerField(verbose_name="注文数")

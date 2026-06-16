@@ -5,9 +5,42 @@
 </head>
 
 <body>
-
     <h1>商品の詳細表示</h1>
+    <table border="1">
+        <tr>
+            <th>商品名</th>
+            <th>{{item.name}}</th>
+        </tr>
+        <tr>
+            <th>商品の色</th>
+            <th>{{item.color}}</th>
+        </tr>
+        <tr>
+            <th>メーカー名</th>
+            <th>{{item.manufacturer}}</th>
+        </tr>
+        <tr>
+            <th>価格</th>
+            <th>{{item.price}} 円</th>
+        </tr>
+        <tr>
+            <th>在庫数</th>
+            <th>{{item.stock}} 個</th>
+        </tr>
+    </table>
 
+    <form action="{% url 'ECapp:cart' %}" method="POST">
+        <input type="hidden" name="item_id" value="{{ item.item_id }}">
+        数量：<select name ="btype">
+        {% for i in count%}
+        <option value = "{{i}}">{{i}}</option>
+        {% endfor %}
+        </select>
+            {% csrf_token %}
+        <br>
+        <input type="submit" value="ショッピングカートに入れる"><br><br>
+    </form>
+    <a href ="{% url 'ECapp:main' %}">商品検索</a>へ
 </body>
 
 
