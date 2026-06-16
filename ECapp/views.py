@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.urls import reverse
 from django.views.generic import View
-from ECapp.models import AccountUser
+from ECapp.models import AccountUser, ShoppingItem, ShoppingItemsincart
 from ECapp.forms import RegisterUserForm, LoginForm
 
 class login(View):
@@ -29,7 +29,6 @@ class login(View):
             'password':request.POST["password"],
         }
         if AccountUser.objects.filter(**user_check):
-            print(request.POST["user_id"])
             request.session['is_login'] = True
             request.session["user_id"] = request.POST["user_id"]
             queryset = AccountUser.objects.get(user_id=request.session["user_id"])
@@ -125,12 +124,15 @@ class register_user_commit(View):
 class main(View):
 
     def get(self, request):
-        queryset = AccountUser.objects.get(user_id=request.session["user_id"])
-        context = {
-            "is_login" : request.session.get('is_login'),
-            "name" : queryset.name
-        }
-        return render(request, "main.html",context)
+        if request.session.get('is_login',None):
+            queryset = AccountUser.objects.get(user_id=request.session["user_id"])
+            context = {
+                "is_login" : request.session.get('is_login'),
+                "name" : queryset.name
+            }
+            return render(request, "main.html",context)
+        else:
+            return render(request, "main.html")
        
 
     def post(self, request):
@@ -147,15 +149,7 @@ class logout(View):
         pass
 
 
-#ここから下を頑張る
-class cart(View):
 
-    def get(self, request):
-        return render(request, "cart.html")
-       
-
-    def post(self, request):
-        pass
 
 class user_info(View):
 
@@ -287,3 +281,92 @@ class with_draw_commit(View):
 
     def post(self, request):
         pass
+
+
+
+class search_result(View):
+
+    def get(self, request):
+        return render(request, "searchResult.html")
+
+    def post(self, request):
+        items = ShoppingItem()
+        
+        if request.POST.get("keyword"):
+            if request.POST.get("btype") == "すべて":
+                items = ShoppingItem.objects.filter(name__icontains=request.POST.get("keyword") )
+            elif request.POST.get("btype") == "鞄" :
+                condition={"categpry_id":1, "name":request.POST.get("keyword")}
+                items = ShoppingItem.objects.filter(**condition)
+            else:
+                condition={"categpry_id":2, "name":request.POST.get("keyword")}
+                items = ShoppingItem.objects.filter(**condition)
+        else:
+            if request.POST.get("btype") == "すべて":
+                items = ShoppingItem.objects.all()
+            elif request.POST.get("btype") == "鞄" :
+                items = ShoppingItem.objects.filter(category_id = 1)
+            else:
+                items = ShoppingItem.objects.filter(category_id = 2)
+
+
+        context = {
+            "keyword":request.POST.get("keyword"),
+            "category":request.POST.get("btype"),
+            "items":items
+        }
+        return render(request, "searchResult.html",context)
+
+
+
+class item_detail(View):
+
+    def get(self, request, item_id):
+        item = ShoppingItem.objects.get(item_id = item_id)
+        count = range(1,item.stock+1)
+        context = {
+            "item":item,
+            "count":count
+        }
+        return render(request, "itemDetail.html",context)
+
+    def post(self, request):
+        pass
+
+
+class cart(View):
+
+    def get(self, request):
+        if request.session.get("is_login"):
+            cartitems = ShoppingItemsincart.objects.filter(
+                user_id=request.session.get("user_id")
+            ).select_related("item")
+            total = sum(item.item.price * item.amount for item in cartitems)
+            context = {
+                "cartitems": cartitems,
+                "sum": total
+            }
+            return render(request, "cart.html", context)
+        else:
+            return redirect(reverse("ECapp:login"))
+
+       
+
+    def post(self, request):
+        if request.session.get("is_login"):
+            if ShoppingItemsincart.objects.filter(
+                user_id=request.session.get("user_id"),
+                item_id=request.POST.get("item_id")
+                ).exists():
+                itemscart=ShoppingItemsincart.objects.get(user_id = request.session.get("user_id"),item_id=request.POST.get("item_id"))
+                itemscart.amount += int(request.POST["btype"])
+            else:
+                itemscart=ShoppingItemsincart.objects.get(pk=request.session.get("user_id"))
+                itemscart.amount = int(request.POST["btype"])
+            itemscart.user_id = request.session.get("user_id")
+            itemscart.item_id = request.POST.get("item_id")
+            itemscart.save()
+            return redirect("ECapp:cart")
+        else: 
+            return redirect(reverse("ECapp:login"))
+        

@@ -6,16 +6,19 @@
 
 <body>
     <h1>商品の検索を行います。</h1>
+    <form action="{% url 'ECapp:search_result' %}" method="POST">
     カテゴリ：<select name ="btype">
-    <option value = "none">すべて</option>
-    <option value = "kutu">靴</option>
-    <option value = "bousi">帽子</option>
+    <option value = "すべて">すべて</option>
+    <option value = "鞄">鞄</option>
+    <option value = "帽子">帽子</option>
     </select>
-    キーワード：<input type="text" name="keyword">
+    キーワード：<input type="text" name="keyword" >
+        {% csrf_token %}
     <input type="submit" value="検索"><br><br>
+    </form>
 
 
-    <a href ="{% url 'ECapp:cart' %}">ショッピングカートを見る</a><br><br>
+    <a href ="{% url 'ECapp:cart'%}">ショッピングカートを見る</a><br><br>
 
     {% if request.session.is_login%}
     ようこそ{{name}}さん<br><br>

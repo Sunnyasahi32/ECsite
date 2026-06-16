@@ -5,9 +5,33 @@
 </head>
 
 <body>
+    <h1>キーワード "{{ keyword|default:"なし" }}" カテゴリ "{{category}}" の検索結果</h1>
+    <table border="1">
+        <tr>
+            <th>商品名</th>
+            <th>商品の色</th>
+            <th>メーカー名</th>
+            <th>価格</th>
+        </tr>
 
-    <h1>キーワード""カテゴリ""の検索結果</h1>
+        {% if items %}
+        {% for item in items %}
+        <tr>
+            <td><a href =  "{% url 'ECapp:item_detail' item.item_id %}">{{item.name}}</a></td>
+            <td>{{item.color}}</td>
+            <td>{{item.manufacturer}}</td>
+            <td>{{item.price}}</td>
+        </tr>
+        {%endfor%}
+        {% else %}
+        該当する商品がありません。
+        {% endif %}
 
+        
+    </table>
+    <br><br>
+    <a href ="{% url 'ECapp:main' %}">商品検索</a>へ
+    
 </body>
 
 
