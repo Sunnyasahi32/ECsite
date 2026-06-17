@@ -4,6 +4,9 @@ from . import views
 app_name = "ECapp" 
 
 urlpatterns = [
+    
+    path("", views.index.as_view(), name="index"),
+    path("main/", views.main.as_view(), name='main'), 
     path("login/", views.login.as_view(), name = 'login'),
     path("registerUser/", views.register_user.as_view(), name = 'register_user'),
     path("registerUserConfirm/", views.register_user_confirm.as_view(), name = 'register_user_confirm'),
@@ -17,7 +20,5 @@ urlpatterns = [
     path("withDrawConfirm/", views.with_draw_confirm.as_view(), name = 'with_draw_confirm'),
     path("searchResult/", views.search_result.as_view(), name = 'search_result'),
     path("itemDetail/<int:item_id>/", views.item_detail.as_view(), name = 'item_detail'),
-
     
-    path("", views.main.as_view(), name = 'main'),
 ]

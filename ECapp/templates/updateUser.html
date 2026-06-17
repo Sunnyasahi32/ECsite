@@ -13,10 +13,14 @@
             パスワードが確認用パスワードと一致していません。
             {% endif %}    
             <table border="1">
+
                 <tr>
                     <th>会員ID</th>
-                    <th><input type="text" name="user_id" value={{user_id}} required></th>
+                    <td>
+                        <input type="text" name="user_id" value="{{ user_id }}" readonly>
+                    </td>
                 </tr>
+                
                 <tr>
                     <th>パスワード</th>
                     <th><input type="text" name="password"  required></th>

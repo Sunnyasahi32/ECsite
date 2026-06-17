@@ -4,6 +4,12 @@ from django.views.generic import View
 from ECapp.models import AccountUser, ShoppingItem, ShoppingItemsincart
 from ECapp.forms import RegisterUserForm, LoginForm
 
+
+class index(View):
+    def get(self, request):
+        return redirect(reverse("ECapp:main"))
+
+
 class login(View):
 
     def get(self, request):
@@ -178,6 +184,8 @@ class update_user(View):
 
     def post(self, request):
         form = RegisterUserForm(request.POST)
+        for field in form.fields.values():
+                field.widget.attrs['readonly'] = True
         if not form.is_valid():
             queryset = AccountUser.objects.get(user_id = request.session.get("user_id"))
             context = {
@@ -199,6 +207,10 @@ class update_user(View):
 class update_user_confirm(View):
     def get(self, request):
         form = RegisterUserForm(request.GET)
+        
+        for field in form.fields.values():
+                field.widget.attrs['readonly'] = True
+
         context = {
             "form":form
         }
@@ -206,11 +218,10 @@ class update_user_confirm(View):
 
     def post(self, request):
         form = RegisterUserForm(request.POST)
-        if not form.is_valid():
-            context = {
-                "form" : form,
-            }
-            return render(request, "updateUser.html", context)
+        
+        for field in form.fields.values():
+                field.widget.attrs['readonly'] = True
+
 
         user = AccountUser()
         user.user_id = request.POST["user_id"]
@@ -239,11 +250,7 @@ class update_user_commit(View):
 
     def post(self, request):
         form = RegisterUserForm(request.POST)
-        if not form.is_valid():
-            context = {
-                "form" : form,
-            }
-            return render(request, "registerUserConfirm.html", context)
+        
         
         context={
             "form":form
@@ -291,6 +298,7 @@ class search_result(View):
 
     def post(self, request):
         items = ShoppingItem()
+    
         
         if request.POST.get("keyword"):
             if request.POST.get("btype") == "すべて":
@@ -322,6 +330,8 @@ class search_result(View):
 class item_detail(View):
 
     def get(self, request, item_id):
+        print("POSTデータ:", request.POST)
+        print("URLのitem_id:", item_id) 
         item = ShoppingItem.objects.get(item_id = item_id)
         count = range(1,item.stock+1)
         context = {
@@ -354,19 +364,27 @@ class cart(View):
 
     def post(self, request):
         if request.session.get("is_login"):
+
             if ShoppingItemsincart.objects.filter(
                 user_id=request.session.get("user_id"),
                 item_id=request.POST.get("item_id")
-                ).exists():
-                itemscart=ShoppingItemsincart.objects.get(user_id = request.session.get("user_id"),item_id=request.POST.get("item_id"))
+            ).exists():
+
+                itemscart = ShoppingItemsincart.objects.get(
+                    user_id=request.session.get("user_id"),
+                    item_id=request.POST.get("item_id")
+                )
+
                 itemscart.amount += int(request.POST["btype"])
+
             else:
-                itemscart=ShoppingItemsincart.objects.get(pk=request.session.get("user_id"))
+                itemscart = ShoppingItemsincart()
+                itemscart.user_id = request.session.get("user_id")
+                itemscart.item_id = request.POST.get("item_id")
                 itemscart.amount = int(request.POST["btype"])
-            itemscart.user_id = request.session.get("user_id")
-            itemscart.item_id = request.POST.get("item_id")
+
             itemscart.save()
             return redirect("ECapp:cart")
-        else: 
+
+        else:
             return redirect(reverse("ECapp:login"))
-        
