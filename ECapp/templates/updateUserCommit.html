@@ -7,15 +7,28 @@
 <body>
 
     <h1>以下の会員情報で更新しました。</h1>
-    <div class="form">
-        <form action= "{% url 'ECapp:update_user_commit' %} " method='POST'>
-            {% csrf_token %}
+   
+        <table border="1">
+            <tr>
+                <th>会員ID</th>
+                <th>{{form.user_id}}</th>
+            </tr>
+            <tr>
+                <th>パスワード</th>
+                <th>{{form.password}}</th>
+            </tr>
+            <tr>
+                <th>お名前</th>
+                <th>{{form.name}}</th>
+            </tr>
+            <tr>
+                <th>ご住所</th>
+                <th>{{form.address}}</th>
+            </tr>
             
-            <table>
-                {{form.as_table}}
-            </table>
+        </table>
+ 
 
-        </form>
     </div>
         <a href ="{% url 'ECapp:main' %}">商品検索</a>へ
 </body>
