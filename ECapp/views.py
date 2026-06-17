@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from django.urls import reverse
 from django.views.generic import View
 from ECapp.models import AccountUser, ShoppingItem, ShoppingItemsincart
-from ECapp.forms import RegisterUserForm, LoginForm
+from ECapp.forms import RegisterUserForm, LoginForm, RegisterUser1Form
 
 
 class index(View):
@@ -55,7 +55,7 @@ class login(View):
 class register_user(View):
 
     def get(self, request):
-        form = RegisterUserForm(request.GET)
+        form = RegisterUser1Form(request.GET)
         context = {
             "form":form
         }
@@ -63,7 +63,7 @@ class register_user(View):
     
     
     def post(self, request, *args, **kwargs):
-        form = RegisterUserForm(request.POST)
+        form = RegisterUser1Form(request.POST)
         if not form.is_valid():
             context = {
                 "form" : form,
@@ -304,10 +304,10 @@ class search_result(View):
             if request.POST.get("btype") == "すべて":
                 items = ShoppingItem.objects.filter(name__icontains=request.POST.get("keyword") )
             elif request.POST.get("btype") == "鞄" :
-                condition={"categpry_id":1, "name":request.POST.get("keyword")}
+                condition={"category_id":1, "name__icontains":request.POST.get("keyword")}
                 items = ShoppingItem.objects.filter(**condition)
             else:
-                condition={"categpry_id":2, "name":request.POST.get("keyword")}
+                condition={"category_id":2, "name__icontains":request.POST.get("keyword")}
                 items = ShoppingItem.objects.filter(**condition)
         else:
             if request.POST.get("btype") == "すべて":
